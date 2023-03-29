@@ -27,7 +27,7 @@ export class PropertyController {
   }
 
   @Post()
-  async create(@Query() search: { query: string }) {
+  async create() {
     try {
       return await this.propertyService.addProperty();
     } catch (e) {
