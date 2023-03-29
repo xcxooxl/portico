@@ -13,3 +13,26 @@ services:
       DATABASE_NAME: postgres
     volumes:
         - ./src:/app/src
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+  rabbitmq:
+    image: rabbitmq:3.8
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+volumes:
+  postgres_data:

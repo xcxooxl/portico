@@ -1,9 +1,20 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Post, Query } from '@nestjs/common';
+import { PropertyService } from '../services/Property.service';
 
-@Controller()
+@Controller('/properties')
 export class AppController {
-  @Get('/products')
-  async get(@Query() search: { query: string }) {
-    return 'hello';
+  private propertyService: PropertyService;
+  constructor(propertyService: PropertyService) {
+    this.propertyService = propertyService;
+  }
+
+  @Post()
+  async create(@Query() search: { query: string }) {
+    try {
+      return await this.propertyService.addProperty();
+    } catch (e) {
+      console.log(e);
+      throw new Error(e);
+    }
   }
 }

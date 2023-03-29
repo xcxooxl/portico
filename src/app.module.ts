@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { AppService } from './services/app.service';
 import { AppController } from './controllers/app.controller';
+import { PropertyService } from './services/Property.service';
+import { RecordService } from './services/Record.service';
+import { Property, Record } from './models';
 
 @Module({
   imports: [
@@ -17,10 +20,12 @@ import { AppController } from './controllers/app.controller';
       synchronize: true,
       autoLoadEntities: true,
     }),
+
+    TypeOrmModule.forFeature([Property, Record]),
     // TypeOrmModule.forFeature([Product, Chain, Price, Store, SubChain, Recipe]),
   ],
   controllers: [AppController],
-  providers: [TypeOrmModule, AppService],
+  providers: [TypeOrmModule, AppService, PropertyService, RecordService],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {
