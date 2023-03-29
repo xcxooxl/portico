@@ -27,7 +27,7 @@ export class Record {
   @Column({ type: 'date' })
   date: Date;
 
-  @Index('record_property_id_index')
+  @Index('record_property_id_index', ['propertyId', 'date'])
   @JoinColumn({ name: 'property_id' })
   @ManyToOne(() => Property, (property) => property.records)
   property: Property;
