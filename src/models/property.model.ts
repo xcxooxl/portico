@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Record } from './Record.model';
+import { Record } from './record.model';
 
 @Entity()
 export class Property {

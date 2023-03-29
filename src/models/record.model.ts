@@ -6,7 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Property } from './Property.model';
+import { Property } from './property.model';
 
 export enum RecordType {
   Expense = 0,
@@ -24,10 +24,10 @@ export class Record {
   @Column({ type: 'integer' })
   type: RecordType;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamp' })
   date: Date;
 
-  @Index('record_property_id_index', ['propertyId', 'date'])
+  @Index('record_property_id_index', ['property_id', 'date'])
   @JoinColumn({ name: 'property_id' })
   @ManyToOne(() => Property, (property) => property.records)
   property: Property;

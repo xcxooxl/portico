@@ -1,5 +1,14 @@
 version: '3'
 services:
+  rabbitmq:
+    image: rabbitmq:3.8
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    ports:
+      - "5672:5672"
+    networks:
+      - my-network
   app:
     image: products-app:1.0
     build: .
@@ -11,19 +20,44 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASSWORD: password
       DATABASE_NAME: postgres
+      RABBIT_USER: admin
+      RABBIT_PASS: admin
+      RABBIT_HOST: rabbitmq
+      RABBIT_PORT: 5672
     volumes:
         - ./src:/app/src
     depends_on:
       - rabbitmq
+      - db
     links:
       - rabbitmq
-  rabbitmq:
-    image: rabbitmq:3.8
+      - db
+    networks:
+      - my-network
+  job_record_processor:
+    image: process_records_job:1.0
+    build:
+        context: .
+        dockerfile: process_records_job.Dockerfile
     environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
-    ports:
-      - "5672:5672"
+      DATABASE_HOST: db
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: postgres
+      RABBIT_USER: admin
+      RABBIT_PASS: admin
+      RABBIT_HOST: rabbitmq
+      RABBIT_PORT: 5672
+    volumes:
+      - ./src:/app/src
+    depends_on:
+      - rabbitmq
+      - db
+    links:
+      - rabbitmq
+      - db
+    networks:
+      - my-network
   db:
     image: postgres:13
     environment:
@@ -34,5 +68,11 @@ services:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - my-network
+
 volumes:
   postgres_data:
+
+networks:
+  my-network:

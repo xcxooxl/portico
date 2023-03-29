@@ -1,2 +1,3 @@
-export * from './Property.model';
-export * from './Record.model';
+export * from './property.model';
+export * from './record.model';
+export * from './montlyRecordSummary.model';

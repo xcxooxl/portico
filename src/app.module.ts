@@ -1,11 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { AppService } from './services/app.service';
-import { AppController } from './controllers/app.controller';
-import { PropertyService } from './services/Property.service';
-import { RecordService } from './services/Record.service';
-import { Property, Record } from './models';
+import { PropertyController } from './controllers/property.controller';
+import { PropertyService } from './services/property.service';
+import { RecordService } from './services/record.service';
+import { MonthRecordSummary, Property, Record } from './models';
+import { RabbitMQService } from './services/rabbitMQ.service';
+import { MonthReportService } from './services/monthReport.service';
 
 @Module({
   imports: [
@@ -21,11 +22,17 @@ import { Property, Record } from './models';
       autoLoadEntities: true,
     }),
 
-    TypeOrmModule.forFeature([Property, Record]),
+    TypeOrmModule.forFeature([Property, Record, MonthRecordSummary]),
     // TypeOrmModule.forFeature([Product, Chain, Price, Store, SubChain, Recipe]),
   ],
-  controllers: [AppController],
-  providers: [TypeOrmModule, AppService, PropertyService, RecordService],
+  controllers: [PropertyController],
+  providers: [
+    TypeOrmModule,
+    PropertyService,
+    RecordService,
+    RabbitMQService,
+    MonthReportService,
+  ],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {

@@ -15,4 +15,4 @@ export const AppDataSource = new DataSource({
   subscribers: [],
 });
 
-if (!AppDataSource.isInitialized) AppDataSource.initialize();
+// if (!AppDataSource.isInitialized) AppDataSource.initialize();
